@@ -4,7 +4,7 @@
 fields=caption,id,like_count,media_type,media_url,permalink,comments_count
 
 <pre>
-id              = id do post;<br />
+id              = id do post;
 caption         = legenda;
 like_count      = quantidade de curtidas do post;
 media_type      = tipo do post ['IMAGE', 'VIDEO', 'CAROUSEL_ALBUM'];
