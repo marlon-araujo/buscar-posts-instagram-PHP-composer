@@ -1,0 +1,60 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Facebook extends CI_Controller
+{
+
+    public function buscar_posts_instagram($id = "", $token = "") {
+
+        if (empty($id) || empty($token)) {
+            echo json_encode(array('retorno' => false, 'mensagem' => '404 nego!'));
+            exit;
+        }
+        $array_retorno = array();
+
+        require_once 'vendor/autoload.php';
+        $fb = new Facebook\Facebook([
+            'app_id' => FACEBOOK_ID,
+            'app_secret' => FACEBOOK_TOKEN,
+            'default_graph_version' => FACEBOOK_VERSAO_APP
+        ]);
+
+        $endpoint = $id . '/media?fields=caption,id,like_count,media_type,media_url,permalink,comments_count';
+
+        $request = $fb->request('GET', '' . $endpoint, [], '' . $token);
+
+        try {
+            $response = $fb->getClient()->sendRequest($request);
+
+        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+            $retorno = 'Graph API: ' . $e->getMessage();
+
+            return json_encode(array('retorno' => false, 'erro' => $retorno));
+            exit;
+
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+            $retorno = 'Facebook SDK: ' . $e->getMessage();
+
+            return json_encode(array('retorno' => false, 'erro' => $retorno));
+            exit;
+        }
+
+        if (!empty($id) && !empty($token)) {
+            $graphEdge = $response->getGraphEdge();
+
+            foreach ($graphEdge as $graphNode) {
+            
+                $cada['id'] = !empty($graphNode['id']) ? $graphNode['id'] : "";
+                $cada['tipo'] = !empty($graphNode['media_type']) ? $graphNode['media_type'] : "";
+                $cada['url'] = !empty($graphNode['media_url']) ? $graphNode['media_url'] : "";
+                $cada['legenda'] = !empty($graphNode['caption']) ? $graphNode['caption'] : "";
+                $cada['likes'] = !empty($graphNode['like_count']) ? $graphNode['like_count'] : 0;
+                $cada['link'] = !empty($graphNode['permalink']) ? $graphNode['permalink'] : "";
+                $cada['comentarios'] = !empty($graphNode['comments_count']) ? $graphNode['comments_count'] : 0;
+                array_push($array_retorno, $cada);
+            }
+        }
+
+        echo json_encode($array_retorno);
+    }
+}
