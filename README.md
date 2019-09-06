@@ -3,8 +3,7 @@
 
 fields=caption,id,like_count,media_type,media_url,permalink,comments_count
 
-id              = id do post;
-
+id              = id do post;<br />
 caption         = legenda;
 
 like_count      = quantidade de curtidas do post;
