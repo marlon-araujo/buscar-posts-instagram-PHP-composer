@@ -4,7 +4,9 @@
 fields=caption,id,like_count,media_type,media_url,permalink,comments_count
 
 id              = id do post;
+
 caption         = legenda;
+
 like_count      = quantidade de curtidas do post;
 media_type      = tipo do post ['IMAGE', 'VIDEO', 'CAROUSEL_ALBUM'];
 media_url       = caminho completo post;
